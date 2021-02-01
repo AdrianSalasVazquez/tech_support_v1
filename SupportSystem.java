@@ -42,7 +42,7 @@ public class SupportSystem
                 finished = true;
             }
             else {
-                String response = responder.generateResponse();
+                String response = responder.generateResponse(input.toLowerCase().trim());
                 System.out.println(response);
             }
         }
