@@ -16,7 +16,10 @@ public class Responder
 
     private Random random;
     private ArrayList<String> respuestas;
-    private HashMap<String, String> filtro;
+    private HashMap<HashSet<String>, String> filtro;
+    private HashSet<String> windowsProblem;
+    private HashSet<String> linuxCrash;
+    private HashSet<String> interfaceBug;
 
     /**
      * Construct a Responder - nothing to do
@@ -25,11 +28,19 @@ public class Responder
     {
         random = new Random();
         respuestas = new ArrayList<String>();
+        windowsProblem = new HashSet<>();
+        windowsProblem.add("windows");
+        windowsProblem.add("problem");
+        linuxCrash = new HashSet<>();
+        linuxCrash.add("linux");
+        linuxCrash.add("crash");
+        interfaceBug = new HashSet<>();
+        interfaceBug.add("interface");
+        interfaceBug.add("bug");
         filtro = new HashMap<>();
-        filtro.put("windows", "Your computer software could be the problem.");
-        filtro.put("linux", "Your computer software could be the problem.");
-        filtro.put("bug", "Sorry for the problems we will try to solve it.");
-        filtro.put("slow", "Maybe your hardware could be problem. Try with a better hardware.");
+        filtro.put(windowsProblem, "Our software dont run on windows, only run on android.");
+        filtro.put(linuxCrash, "Our software dont run on linux, only run on android.");
+        filtro.put(interfaceBug, "Sorry maybe we have a problem in our interface we will look into it.");
         respuestas.add("That sounds interesting. Tell me more...");
         respuestas.add("Ok, I understand...");
         respuestas.add("I will look at it...");
@@ -44,16 +55,10 @@ public class Responder
     public String generateResponse(HashSet<String> userInput)
     {
         String respuesta = "";
-        Boolean igual = false;
-        Iterator<String> ite = userInput.iterator();
-        while (ite.hasNext() && !igual){
-            String palabra = ite.next();
-            if (filtro.containsKey(palabra)){
-                respuesta = filtro.get(palabra);
-                igual = true;
-            }
+        if (filtro.containsKey(userInput)){
+            respuesta = filtro.get(userInput);
         }
-        if (!igual){
+        else {
             respuesta = respuestas.get(random.nextInt(respuestas.size()));
         }
         return respuesta;
