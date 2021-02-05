@@ -18,8 +18,8 @@ public class Responder
     private ArrayList<String> respuestas;
     private HashMap<HashSet<String>, String> filtro;
     private HashSet<String> windowsProblem;
-    private HashSet<String> linuxCrash;
-    private HashSet<String> interfaceBug;
+    private HashSet<String> linuxCrashProblem;
+    private HashSet<String> interfaceBugProblem;
 
     /**
      * Construct a Responder - nothing to do
@@ -31,16 +31,18 @@ public class Responder
         windowsProblem = new HashSet<>();
         windowsProblem.add("windows");
         windowsProblem.add("problem");
-        linuxCrash = new HashSet<>();
-        linuxCrash.add("linux");
-        linuxCrash.add("crash");
-        interfaceBug = new HashSet<>();
-        interfaceBug.add("interface");
-        interfaceBug.add("bug");
+        linuxCrashProblem = new HashSet<>();
+        linuxCrashProblem.add("linux");
+        linuxCrashProblem.add("crash");
+        linuxCrashProblem.add("problem");
+        interfaceBugProblem = new HashSet<>();
+        interfaceBugProblem.add("interface");
+        interfaceBugProblem.add("bug");
+        interfaceBugProblem.add("problem");
         filtro = new HashMap<>();
         filtro.put(windowsProblem, "Our software dont run on windows, only run on android.");
-        filtro.put(linuxCrash, "Our software dont run on linux, only run on android.");
-        filtro.put(interfaceBug, "Sorry maybe we have a problem in our interface we will look into it.");
+        filtro.put(linuxCrashProblem, "Our software dont run on linux, only run on android.");
+        filtro.put(interfaceBugProblem, "Sorry maybe we have a problem in our interface we will look into it.");
         respuestas.add("That sounds interesting. Tell me more...");
         respuestas.add("Ok, I understand...");
         respuestas.add("I will look at it...");
@@ -55,10 +57,23 @@ public class Responder
     public String generateResponse(HashSet<String> userInput)
     {
         String respuesta = "";
-        if (filtro.containsKey(userInput)){
-            respuesta = filtro.get(userInput);
+        int coincidencias = 0;
+        int coincAnteriores = 0;
+        Iterator<HashSet<String>> ite = filtro.keySet().iterator();
+        while (ite.hasNext()){
+            HashSet<String> coleccion = ite.next();
+            for (String palabra : userInput){
+                if (coleccion.contains(palabra)){
+                    coincidencias++;
+                }
+            }
+            if (coincidencias > 0 && coincAnteriores <= coincidencias){
+                respuesta = filtro.get(coleccion);
+                coincAnteriores = coincidencias;
+            }
+            coincidencias = 0;
         }
-        else {
+        if (respuesta == "") {
             respuesta = respuestas.get(random.nextInt(respuestas.size()));
         }
         return respuesta;
