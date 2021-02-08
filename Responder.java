@@ -75,7 +75,7 @@ public class Responder
             }
 
         }
-        if (respuesta == "" || respuestaAnt == respuesta) {
+        if (respuesta == "" || respuestaAnt.equals(respuesta)) {
             respuesta = respuestas.get(random.nextInt(respuestas.size()));
         }
         respuestaAnt = respuesta;
