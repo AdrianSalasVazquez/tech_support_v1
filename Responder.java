@@ -20,7 +20,7 @@ public class Responder
     private HashSet<String> windowsProblem;
     private HashSet<String> linuxCrashProblem;
     private HashSet<String> interfaceBugProblem;
-    private HashSet<String> respuestasAnt;
+    private String respuestaAnt;
 
     /**
      * Construct a Responder - nothing to do
@@ -29,7 +29,7 @@ public class Responder
     {
         random = new Random();
         respuestas = new ArrayList<String>();
-        respuestasAnt = new HashSet<>();
+        respuestaAnt = "";
         windowsProblem = new HashSet<>();
         windowsProblem.add("windows");
         windowsProblem.add("problem");
@@ -69,20 +69,16 @@ public class Responder
                     coincidencias++;
                 }
             }
-            if (respuestasAnt == coleccion){
-                respuesta = respuestas.get(random.nextInt(respuestas.size()));
+            if (coincidencias > 0 && coincAnteriores <= coincidencias){
+                respuesta = filtro.get(coleccion);
+                coincAnteriores = coincidencias;
             }
-            else {
-                if (coincidencias > 0 && coincAnteriores <= coincidencias){
-                    respuesta = filtro.get(coleccion);
-                    respuestasAnt = coleccion;
-                    coincAnteriores = coincidencias;
-                }
-            }
+
         }
-        if (respuesta == "") {
+        if (respuesta == "" || respuestaAnt == respuesta) {
             respuesta = respuestas.get(random.nextInt(respuestas.size()));
         }
+        respuestaAnt = respuesta;
         return respuesta;
     }
 }
