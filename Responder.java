@@ -20,6 +20,7 @@ public class Responder
     private HashSet<String> windowsProblem;
     private HashSet<String> linuxCrashProblem;
     private HashSet<String> interfaceBugProblem;
+    private HashSet<HashSet<String>> respuestasAnt;
 
     /**
      * Construct a Responder - nothing to do
@@ -28,6 +29,7 @@ public class Responder
     {
         random = new Random();
         respuestas = new ArrayList<String>();
+        respuestasAnt = new HashSet<>();
         windowsProblem = new HashSet<>();
         windowsProblem.add("windows");
         windowsProblem.add("problem");
@@ -57,21 +59,26 @@ public class Responder
     public String generateResponse(HashSet<String> userInput)
     {
         String respuesta = "";
-        int coincidencias = 0;
         int coincAnteriores = 0;
         Iterator<HashSet<String>> ite = filtro.keySet().iterator();
         while (ite.hasNext()){
+            int coincidencias = 0;
             HashSet<String> coleccion = ite.next();
             for (String palabra : userInput){
                 if (coleccion.contains(palabra)){
                     coincidencias++;
                 }
             }
-            if (coincidencias > 0 && coincAnteriores <= coincidencias){
-                respuesta = filtro.get(coleccion);
-                coincAnteriores = coincidencias;
+            if (respuestasAnt.contains(coleccion)){
+                respuesta = respuestas.get(random.nextInt(respuestas.size()));
             }
-            coincidencias = 0;
+            else {
+                if (coincidencias > 0 && coincAnteriores <= coincidencias){
+                    respuesta = filtro.get(coleccion);
+                    respuestasAnt.add(coleccion);
+                    coincAnteriores = coincidencias;
+                }
+            }
         }
         if (respuesta == "") {
             respuesta = respuestas.get(random.nextInt(respuestas.size()));
