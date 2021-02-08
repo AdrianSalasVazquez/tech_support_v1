@@ -20,7 +20,7 @@ public class Responder
     private HashSet<String> windowsProblem;
     private HashSet<String> linuxCrashProblem;
     private HashSet<String> interfaceBugProblem;
-    private HashSet<HashSet<String>> respuestasAnt;
+    private HashSet<String> respuestasAnt;
 
     /**
      * Construct a Responder - nothing to do
@@ -69,13 +69,13 @@ public class Responder
                     coincidencias++;
                 }
             }
-            if (respuestasAnt.contains(coleccion)){
+            if (respuestasAnt == coleccion){
                 respuesta = respuestas.get(random.nextInt(respuestas.size()));
             }
             else {
                 if (coincidencias > 0 && coincAnteriores <= coincidencias){
                     respuesta = filtro.get(coleccion);
-                    respuestasAnt.add(coleccion);
+                    respuestasAnt = coleccion;
                     coincAnteriores = coincidencias;
                 }
             }
